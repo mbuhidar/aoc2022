@@ -16,17 +16,21 @@ def compute(s: str) -> int:
 
     elf_sum = 0
     high_sum = 0
+    high_sums = []
 
     for line in lines:
         if line == '':
             if elf_sum > high_sum:
                 high_sum = elf_sum
+                high_sums.append(high_sum)
                 print(high_sum)
+                print(high_sums[-3:])
             elf_sum = 0
             continue
 
         elf_sum += int(line)
-    return high_sum 
+
+    return sum(high_sums[-3:])
 
 
 INPUT_S = '''\
