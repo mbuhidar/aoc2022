@@ -29,16 +29,15 @@ def compute(s: str) -> int:
     return high_sum 
 
 
-INPUT_S = '''\
+INPUT_S = '1\r1\r\r2\r4\r\r'
 
-'''
-EXPECTED = 1
+EXPECTED = 6
 
 
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-        ('1\r1\r\r2\r4\r\r', 6),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:

@@ -11,38 +11,43 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
 def compute(s: str) -> int:
-    print(s)
     lines = s.splitlines()
 
     elf_sum = 0
-    high_sum = 0
     high_sums = []
 
     for line in lines:
         if line == '':
-            if elf_sum > high_sum:
-                high_sum = elf_sum
-                high_sums.append(high_sum)
-                print(high_sum)
-                print(high_sums[-3:])
+            high_sums.append(elf_sum)
             elf_sum = 0
             continue
 
         elf_sum += int(line)
 
-    return sum(high_sums[-3:])
+    return sum(sorted(high_sums, reverse=False)[-3:])
 
 
 INPUT_S = '''\
+1
+2
+2
 
+2
+4
+
+1
+2
+
+1
+1
 '''
-EXPECTED = 1
+EXPECTED = 14
 
 
 @pytest.mark.parametrize(
     ('input_s', 'expected'),
     (
-        ('1\r1\r\r2\r4\r\r', 6),
+        (INPUT_S, EXPECTED),
     ),
 )
 def test(input_s: str, expected: int) -> None:
