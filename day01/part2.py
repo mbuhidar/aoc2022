@@ -24,7 +24,7 @@ def compute(s: str) -> int:
 
         elf_sum += int(line)
 
-    return sum(sorted(high_sums, reverse=False)[-3:])
+    return sum(sorted(high_sums)[-3:])
 
 
 INPUT_S = '''\

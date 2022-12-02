@@ -26,7 +26,7 @@ def compute(s: str) -> int:
             continue
 
         elf_sum += int(line)
-    return high_sum 
+    return high_sum
 
 
 INPUT_S = '1\r1\r\r2\r4\r\r'
