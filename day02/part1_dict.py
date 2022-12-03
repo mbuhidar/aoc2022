@@ -12,26 +12,30 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 def compute(s: str) -> int:
 
-    n = 0
+    transform = {
+        'A': 'R', 'B': 'P', 'C': 'S',
+        'X': 'R', 'Y': 'P', 'Z': 'S',
+    }
+    pick = {'R': 1, 'P': 2, 'S': 3}
+    winner = {'R': 'S', 'P': 'R', 'S': 'P'}
+
+    cnt = 0
+
+    for k, v in transform.items():
+        s = s.replace(k, v)
 
     lines = s.splitlines()
 
     for line in lines:
-        one = ord(line[0]) - 64
-        two = ord(line[2]) - 87
-
-        n += two
-
+        one, two = line.split()
         if one == two:
-            n += 3
-        elif line[0] == 'A' and line[2] == 'Y':
-            n += 6
-        elif line[0] == 'B' and line[2] == 'Z':
-            n += 6
-        elif line[0] == 'C' and line[2] == 'X':
-            n += 6
+            cnt += 3
+        elif winner[one] != two:
+            cnt += 6
 
-    return n
+        cnt += pick[two]
+
+    return cnt
 
 
 INPUT_S = '''\
