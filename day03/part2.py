@@ -12,18 +12,19 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 def compute(s: str) -> int:
 
-    pri_sum = 0
+    badge_sum = 0
 
     lines = s.splitlines()
-    for line in lines:
-        c1, c2 = line[:len(line)//2], line[len(line)//2:]
-        for letter in set(c1):
-            if letter in set(c2):
-                if letter.islower():
-                    pri_sum += ord(letter) - ord('a') + 1
-                else:
-                    pri_sum += ord(letter) - ord('A') + 27
-    return pri_sum
+
+    while lines:
+        badge = (set(lines[0]) & set(lines[1]) & set(lines[2])).pop()
+        if badge.islower():
+            badge_sum += (ord(badge) - ord('a') + 1)
+        else:
+            badge_sum += (ord(badge) - ord('A') + 27)
+
+        lines = lines[3:]
+    return badge_sum
 
 
 INPUT_S = '''\
@@ -34,7 +35,7 @@ wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw
 '''
-EXPECTED = 157
+EXPECTED = 70
 
 
 @pytest.mark.parametrize(
