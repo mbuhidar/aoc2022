@@ -12,44 +12,31 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 def compute(s: str) -> int:
 
-    transform = {
-        'A': 'R', 'B': 'P', 'C': 'S',
-        'X': 'R', 'Y': 'P', 'Z': 'S',
-    }
-    pick = {'R': 1, 'P': 2, 'S': 3}
-    winner = {'R': 'S', 'P': 'R', 'S': 'P'}
-
-    cnt = 0
-
-    for k, v in transform.items():
-        s = s.replace(k, v)
+    pri_sum = 0
 
     lines = s.splitlines()
-
     for line in lines:
-        one, two = line.split()
-        if one == two:
-            cnt += 3
-        elif winner[one] != two:
-            cnt += 6
-
-        cnt += pick[two]
-
-    return cnt
+        c1, c2 = line[:len(line)//2], line[len(line)//2:]
+        print(line, c1, c2)
+        for letter in set(c1):
+            if letter in set(c2):
+                if letter.islower():
+                    pri_sum += ord(letter) - ord('a') + 1
+                else:
+                    pri_sum += ord(letter) - ord('A') + 27
+                print(letter)
+    return pri_sum
 
 
 INPUT_S = '''\
-A X
-A Y
-A Z
-B X
-B Y
-B Z
-C X
-C Y
-C Z
+vJrwpWtwJgWrhcsFMMfFFhFp
+jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+PmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT
+CrZsJsPPZsGzwwsLwLmpwMDw
 '''
-EXPECTED = 18 + 27
+EXPECTED = 157
 
 
 @pytest.mark.parametrize(
