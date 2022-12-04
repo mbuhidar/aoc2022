@@ -12,30 +12,44 @@ INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 def compute(s: str) -> int:
 
-    badge_sum = 0
-
     lines = s.splitlines()
 
-    while lines:
-        badge, = (set(lines[0]) & set(lines[1]) & set(lines[2]))
-        if badge.islower():
-            badge_sum += (ord(badge) - ord('a') + 1)
-        else:
-            badge_sum += (ord(badge) - ord('A') + 27)
+    cnt = 0
+    for line in lines:
+        elf_set = line.split(',')
+        two_elf = []
+        for assignment in elf_set:
+            elf = assignment.split('-')
+            elf_list = []
+            for room in range(int(elf[0]), int(elf[1])+1):
+                elf_list.append(room)
+            two_elf.append(elf_list)
 
-        lines = lines[3:]
-    return badge_sum
+        test1 = set(two_elf[0]).issubset(set(two_elf[1]))
+        test2 = set(two_elf[1]).issubset(set(two_elf[0]))
+
+        if test1 or test2:
+            cnt += 1
+
+    return cnt
 
 
 INPUT_S = '''\
-vJrwpWtwJgWrhcsFMMfFFhFp
-jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
-PmmdzqPrVvPwwTWBwg
-wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
-ttgJtRGJQctTZtZT
-CrZsJsPPZsGzwwsLwLmpwMDw
+34-82,33-81
+59-59,69-73
+6-96,98-99
+1-94,3-96
+13-92,20-64
+37-75,76-93
+5-98,6-6
+40-65,40-64
+13-63,84-91
+31-75,31-35
+83-96,86-96
+65-85,64-85
+2-59,49-58
 '''
-EXPECTED = 70
+EXPECTED = 7
 
 
 @pytest.mark.parametrize(
