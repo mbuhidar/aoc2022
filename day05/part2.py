@@ -43,8 +43,13 @@ def compute(s: str) -> int:
         fr_s = int(line.split(' ')[3]) - 1
         to_s = int(line.split(' ')[5]) - 1
 
+        temp = []
         for _ in range(move):
-            stacks[to_s].append(stacks[fr_s].pop())
+            temp.append(stacks[fr_s].pop())
+        # jemp.reverse()
+
+        for _ in range(move):
+            stacks[to_s].append(temp.pop())
 
     for stack in stacks:
         code = ''.join(stack[-1] if stack else '' for stack in stacks)
@@ -63,7 +68,7 @@ move 3 from 1 to 3
 move 2 from 2 to 1
 move 1 from 1 to 2
 '''
-EXPECTED = 'CMZ'
+EXPECTED = 'MCD'
 
 
 @pytest.mark.parametrize(
