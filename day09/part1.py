@@ -8,7 +8,7 @@ import pytest
 
 import support
 
-INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input2.txt')
+INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
 def compute(s: str) -> int:
@@ -18,6 +18,36 @@ def compute(s: str) -> int:
     head_pos = [0, 0]
     tail_pos = [0, 0]
     tail_cnt = [[0, 0]]
+    first_move = True
+
+    def move_tail(xh: int, yh: int, xt: int, yt: int) -> tuple[int, int]:
+        dx = xh - xt
+        dy = yh - yt
+        if dx > 1:
+            xt += 1
+            if dy > 0:
+                yt += 1
+            elif dy < 0:
+                yt -= 1
+        elif dx < -1:
+            xt -= 1
+            if dy > 0:
+                yt += 1
+            elif dy < 0:
+                yt -= 1
+        elif dy > 1:
+            yt += 1
+            if dx > 0:
+                xt += 1
+            elif dx < 0:
+                xt -= 1
+        elif dy < -1:
+            yt -= 1
+            if dx > 0:
+                xt += 1
+            elif dx < 0:
+                xt -= 1
+        return (xt, yt)
 
     for line in lines:
         direction = line.split(' ')[0]
@@ -35,19 +65,27 @@ def compute(s: str) -> int:
 
         for _ in range(distance):
             head_pos = list(map(operator.add, head_pos, vector))
-            print(head_pos)
 
-            if tail_pos[0] == head_pos[0]:
+            if first_move is True:
+                first_move = False
+                continue
+
+            t_h = list(map(operator.sub, head_pos, tail_pos))
+            print(direction, distance, tail_pos, head_pos, t_h)
+
+            if tail_pos[0] == head_pos[0] or tail_pos[1] == head_pos[1]:
                 tail_pos = list(map(operator.add, tail_pos, vector))
-            elif tail_pos[1] == head_pos[1]:
-                tail_pos = list(map(operator.add, tail_pos, vector))
-            elif abs(tail_pos[0] - head_pos[0]) > 1:
-                pass
+            elif t_h[0] >= 2 or t_h[1] >= 2:
+                dx = t_h[0]
+                dy = t_h[1]
+                tx = 1 if dx > 0 else -1
+                ty = 1 if dy > 0 else -1
+                tail_pos = [tail_pos[0]+tx, tail_pos[1]+ty]
 
             if tail_pos not in tail_cnt:
                 tail_cnt.append(tail_pos)
 
-    print(tail_cnt)
+    print('not working correctly')
 
     return len(tail_cnt)
 
