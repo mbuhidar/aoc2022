@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import os
 from typing import Any
-from typing import Set
 
 import pytest
 
@@ -41,7 +40,7 @@ class Head(Knot):
 class Tail(Knot):
     def __init__(self) -> None:
         super().__init__()
-        self.history: Set[Any] = set()
+        self.history: set[Any] = set()
 
     def follow(self, pos: tuple[int, int]) -> None:
         x, y = pos

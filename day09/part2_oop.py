@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import os
 from typing import Any
-from typing import Set
 
 import pytest
 
@@ -41,7 +40,7 @@ class Head(Knot):
 class Tail(Knot):
     def __init__(self) -> None:
         super().__init__()
-        self.history: Set[Any] = set()
+        self.history: set[Any] = set()
 
     def follow(self, pos: tuple[int, int]) -> None:
         x, y = pos
@@ -67,20 +66,6 @@ def compute(s: str) -> int:
     directions = s.splitlines()
 
     head = Head()
-    tail = Tail()
-
-    for direction in directions:
-        dir_, steps = direction.split()
-        for _ in range(int(steps)):
-            head.step(dir_)
-            tail.follow(head.pos)
-
-    print(f'Number of positions visited: {len(tail.history)}')
-    return len(tail.history)
-
-    '''
-    # part 2
-    head = Head()
     tails = [Tail() for _ in range(9)]
     for direction in directions:
         dir_, steps = direction.split()
@@ -89,21 +74,20 @@ def compute(s: str) -> int:
             tails[0].follow(head.pos)
             for i in range(1, 9):
                 tails[i].follow(tails[i-1].pos)
-    print(f"Number of positions visited: {len(tails[8].history)}")
-    '''
+    return len(tails[8].history)
 
 
 INPUT_S = '''\
-R 4
-U 4
-L 3
-D 1
-R 4
-D 1
-L 5
-R 2
+R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20
 '''
-EXPECTED = 13
+EXPECTED = 36
 
 
 @pytest.mark.parametrize(
