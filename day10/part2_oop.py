@@ -10,48 +10,42 @@ import support
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
-def signal(clock: int, xreg: int, signal_sum: int) -> int:
-    if clock in [x for x in range(20, 240, 40)]:
-        signal_sum += int(clock * xreg)
-        return signal_sum
-    else:
-        return signal_sum
+class Clock:
+    def __init__(self) -> None:
+        self.cycle = 0
+        self.signal_strength = 0
+        self.crt = ['.' for _ in range(240)]
+
+    def inc(self, pos: int) -> None:
+        if self.cycle % 40 in [pos - 1, pos, pos + 1]:
+            self.crt[self.cycle] = '#'
+        self.cycle += 1
+
+    def display(self) -> str:
+        output = ''
+        for row in range(6):
+            start = row * 40
+            end = start + 40
+            output += ''.join(self.crt[start:end]) + '\n'
+        return output.rstrip()
 
 
 def compute(s: str) -> str:
 
-    clock = 0
-    xreg = 1
-    signal_dict = {}
-    print_str = ''
-    output = ''
+    instructions = s.splitlines()
 
-    lines = s.splitlines()
-    signal_dict.update({clock: [xreg-1, xreg, xreg+1]})
-    for line in lines:
-        if line == 'noop':
-            clock += 1
-            signal_dict.update({clock: [xreg-1, xreg, xreg+1]})
-        elif line.startswith('addx'):
-            clock += 1
-            signal_dict.update({clock: [xreg-1, xreg, xreg+1]})
-            clock += 1
-            xreg += int(line.split()[1])
-            signal_dict.update({clock: [xreg-1, xreg, xreg+1]})
+    x = 1
+    clock = Clock()
+    for instruction in instructions:
+        match instruction.split():
+            case ['noop']:
+                clock.inc(x)
+            case ['addx', number]:
+                clock.inc(x)
+                clock.inc(x)
+                x += int(number)
 
-    for cycle in range(0, 240):
-        if cycle % 40 in signal_dict[cycle]:
-            print_str += '#'
-        else:
-            print_str += '.'
-
-    for cnt, letter in enumerate(print_str):
-        line_pos = cnt + 1
-        if line_pos in [x for x in range(40, 240, 40)]:
-            letter += '\n'
-        output += letter
-
-    return output
+    return clock.display()
 
 
 INPUT_S = '''\
