@@ -9,8 +9,6 @@ import support
 
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
-PT = (500, 0)
-
 
 def compute(s: str) -> int:
     coords = set()
@@ -27,14 +25,19 @@ def compute(s: str) -> int:
                     coords.add((x, cand_y))
             prev_x, prev_y = cand_x, cand_y
 
-    max_y = max(y for _, y in coords)
+    _, by = support.bounds(coords)
 
     i = 0
 
     while True:
         px, py = 500, 0
         while True:
-            if (px, py + 1) not in coords:
+            if (px, py) in coords:
+                return i
+            elif py == by.max + 1:
+                coords.add((px, py))
+                break
+            elif (px, py + 1) not in coords:
                 py += 1
             elif (px - 1, py + 1) not in coords:
                 px -= 1
@@ -46,9 +49,6 @@ def compute(s: str) -> int:
                 coords.add((px, py))
                 break
 
-            if py > max_y:
-                return i
-
         i += 1
 
     raise AssertionError('unreachable')
@@ -58,7 +58,7 @@ INPUT_S = '''\
 498,4 -> 498,6 -> 496,6
 503,4 -> 502,4 -> 502,9 -> 494,9
 '''
-EXPECTED = 24
+EXPECTED = 93
 
 
 @pytest.mark.parametrize(
